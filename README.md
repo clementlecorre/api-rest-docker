@@ -4,7 +4,7 @@ Sample Go api For deploy docker container with socket
 
 ## Run
 
-```
+```bash
 docker build -t deploy  .
 docker run -it -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/api:/go deploy bash
 export GOBIN=$GOPATH/bin && go get
@@ -13,7 +13,7 @@ export GOBIN=$GOPATH/bin && go run *.go
 
 ## TEST
 
-```
+```bash
 curl -X POST --header 'Content-Type: application/json' --header 'X-AUTH-TOKEN: 1234' -d '{
 	"Image": "httpd:alpine",
 	"PortSpecs": [
