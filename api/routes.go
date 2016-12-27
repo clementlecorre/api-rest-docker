@@ -24,22 +24,4 @@ var routes = Routes{
 		"/deploy",
 		deploy,
 	},
-	// Route{
-	// 	"deploytest",
-	// 	"POST",
-	// 	"/deploytest",
-	// 	deploytest,
-	// },
-	// Route{
-	// 	"TodoCreate",
-	// 	"POST",
-	// 	"/todos",
-	// 	TodoCreate,
-	// },
-	// Route{
-	// 	"TodoShow",
-	// 	"GET",
-	// 	"/todos/{todoId}",
-	// 	TodoShow,
-	// },
 }

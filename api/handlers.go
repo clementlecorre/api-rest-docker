@@ -1,6 +1,5 @@
 package main
-//"github.com/gorilla/mux"
-// "encoding/json"
+
 import (
 	"fmt"
 	"net/http"
@@ -31,48 +30,60 @@ func deploy(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	if err := json.Unmarshal(body, &config); err != nil {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.Header().Set("Content-Type", "application/json;")
 		w.WriteHeader(422) // unprocessable entity
 		if err := json.NewEncoder(w).Encode(err); err != nil {
 			panic(err)
 		}
 	}
-	fmt.Printf("%+v\n", config)
+	//Debug
+	//fmt.Printf("%+v\n", config)
 	timeout := 3 * time.Second
 
 	client, err := docker.NewDefaultClient(timeout)
 	if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 	}
+	log.Printf("Removing : " + config.Hostname)
+	err = client.RemoveContainer(config.Hostname,true, true)
+		if err != nil {
+	      fmt.Println("ERROR remove:", err)
+	  }
+
 	//Pulling image before start
 	log.Printf("Start pull: " + config.Image)
 	err = client.PullImage(config.Image, &docker.AuthConfig{})
-	log.Printf("End pull: " + config.Image)
   if err != nil {
       fmt.Println("ERROR pulling:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			message := &Response{Message: "Failed pulling for "+config.Image}
+			json.NewEncoder(w).Encode(message)
+			return
   }
+	log.Printf("End pull: " + config.Image)
 
 	log.Printf("Launching image: " + config.Image)
 	cid, err := client.CreateContainer(&config, config.Hostname)
 	if err != nil {
-	 	//json.NewEncoder(w).Encode(Articles{Error: err})
+		fmt.Println("ERROR CreateContainer:", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		message := &Response{Message: "Failed CreateContainer for "+config.Image}
+		json.NewEncoder(w).Encode(message)
+		return
 	}
 
 	// start the container
-	err = client.StartContainer(cid, &docker.HostConfig{})
+	err = client.StartContainer(cid, &config.HostConfig)
 	if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println("ERROR StartContainer:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		message := &Response{Message: "Failed StartContainer for "+config.Image}
+		json.NewEncoder(w).Encode(message)
+		return
 	}
-  message := &Response{Message: "Success for deploy "+config.Image}
-
-
-	json.NewEncoder(w).Encode(message)
+	message := &Response{Message: "Success for deploy "+config.Image}
 	w.Header().Set("Content-Type", "application/json")
-
 	w.WriteHeader(http.StatusOK)
-	}
+	json.NewEncoder(w).Encode(message)
 
-// func deploytest(w http.ResponseWriter, r *http.Request) {
-// 	client, _ := docker.NewClientFromEnv()
-// }
+}
