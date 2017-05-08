@@ -1,7 +1,6 @@
 # deploy-docker
 
-Sample Go api For deploy docker container with socket
-
+Deploy docker container with Go rest api
 
 ## Environment variables
 
@@ -41,5 +40,22 @@ curl -X POST --header 'Content-Type: application/json' --header 'X-AUTH-TOKEN: 0
   "Env": [
                 "test=coucou"
     ]
+}' http://localhost:8080/deploy
+```
+
+```
+curl -X POST --header 'Content-Type: application/json' --header 'X-AUTH-TOKEN: 1234' -d '{
+    "Image": "nginx",
+    "Env": [
+                "VIRTUAL_NETWORK=nginx-proxy",
+                "LETSENCRYPT_HOST=test.mydomain.com",
+                "LETSENCRYPT_EMAIL=clement@mydomain.com",
+                "VIRTUAL_HOST=test.mydomain.com",
+                "VIRTUAL_PORT=80"
+            ],
+  "HostConfig":{
+    "PortBindings": {}
+  }
+  "Hostname": "test"
 }' http://localhost:8080/deploy
 ```
