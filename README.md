@@ -1,6 +1,15 @@
-# deploy-docker
+# api-rest-docker
+
+[![Docker Automated buil](https://img.shields.io/docker/automated/cl3m3nt/api-rest-docker.svg?style=flat-square)](https://hub.docker.com/r/cl3m3nt/api-rest-docker/)
+[![Docker Build Statu](https://img.shields.io/docker/build/cl3m3nt/api-rest-docker.svg?style=flat-square)](https://hub.docker.com/r/cl3m3nt/api-rest-docker/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/cl3m3nt/api-rest-docker.svg?style=flat-square)](https://hub.docker.com/r/cl3m3nt/api-rest-docker/)
 
 Deploy docker container with Go rest api
+
+## Library used
+
+* https://github.com/yhat/go-docker
+* https://github.com/gorilla/mux
 
 ## Environment variables
 
@@ -13,8 +22,8 @@ Deploy docker container with Go rest api
 
 
 ```bash
-docker build -t deploy  .
-docker run -it -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -e xtoken=0000 deploy
+docker build -t cl3m3nt/api-rest-docker  .
+docker run -it -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -e xtoken=0000 cl3m3nt/api-rest-docker
 ```
 
 ## Deploy with API
@@ -43,7 +52,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'X-AUTH-TOKEN: 0
 }' http://localhost:8080/deploy
 ```
 
-```
+```bash
 curl -X POST --header 'Content-Type: application/json' --header 'X-AUTH-TOKEN: 1234' -d '{
     "Image": "nginx",
     "Env": [

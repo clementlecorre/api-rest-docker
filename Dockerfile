@@ -1,8 +1,8 @@
 FROM golang:1.7
 
 LABEL maintainer "clement@le-corre.eu" \
-      go_lib_docker "github.com/yhat/go-docker"\
-      go_lib_docker "github.com/gorilla/mux"\
+      eu.le-corre.go_lib_docker "github.com/yhat/go-docker"\
+      eu.le-corre.go_lib_docker "github.com/gorilla/mux"\
       description "API rest for deploy container easily"
 
 ENV xtoken=1234 \
