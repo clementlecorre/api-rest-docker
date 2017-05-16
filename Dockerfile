@@ -5,8 +5,9 @@ LABEL maintainer "clement@le-corre.eu" \
       eu.le-corre.go_lib_docker "github.com/gorilla/mux"\
       description "API rest for deploy container easily"
 
+ARG DOCKER_VERSION=17.03*
+
 ENV xtoken=1234 \
-    docker_version=17.03.1* \
     GOPATH=$GOPATH:/go/api \
     GOBIN=$GOPATH/bin
 
@@ -23,7 +24,7 @@ RUN apt-get update && \
          $(lsb_release -cs) \
          stable" && \
     apt-get update && \
-    apt-get -y install docker-ce=$docker_version && \
+    apt-get -y install docker-ce=$DOCKER_VERSION && \
     rm -rf /var/lib/apt/lists/*
 
 COPY api/ /go/api
